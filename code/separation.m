@@ -26,8 +26,8 @@ atoms=[];
 idx=kmeans(tx,clusters); % idx contains the local textural representations of the texture atoms.
 for iter=1:clusters
     indices=find(idx==iter);
-    m=mean(tx(indices,:)); % performing mean on clusters should give texture representative atom of the local textures(distinct).
-    atoms=cat(1,atoms,m);
+    temp=mean(tx(indices,:)); % performing mean on clusters should give texture representative atom of the local textures(distinct).
+    atoms=cat(1,atoms,temp);
 end
 %     mean=sum(channel1(indices))/length(indices);
 
