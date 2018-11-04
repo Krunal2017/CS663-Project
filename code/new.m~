@@ -68,7 +68,7 @@ eigspace=transpose(V_hat)*mean_deducted;
 transformedspace=transpose(eigspace);
 
 %% clustering
-clusters=3;
+clusters=5;
 idx=kmeans(transformedspace,clusters);
 % new_im=reshape(idx,m-4,n-4);
 % figure,imshow(mat2gray(new_im)),colorbar;
@@ -84,7 +84,7 @@ for iter=1:clusters
 end
 txanimg=transpose(animg);
 newimg=reshape(txanimg,m-4,n-4);
-figure,imshow(mat2gray(newimg)),colorbar;
+% figure,imshow(mat2gray(newimg)),colorbar;
 
 % r=eigen_vectors(:,1);
 % g=eigen_vectors(:,26);
@@ -97,11 +97,12 @@ figure,imshow(mat2gray(newimg)),colorbar;
 % transpose(V_hat)*mean_deducted;
 
 cov=[];
-for j=1:clusters
-    for iter=1:clusters
-        cov(j,iter)=var((atoms(j,:)-atoms(iter,:)).^2);
-    end
-end
+% for j=1:clusters
+%     for iter=1:clusters
+%         cov(j,iter)=var((atoms(j,:)-atoms(iter,:)).^2);
+%     end
+% end
+cov=atoms*transpose(atoms);
 Pij=[];
 for i=1:clusters
     for j=1:clusters
@@ -114,17 +115,41 @@ for i=1:clusters
         end
     end
 end
+% indices=find(Pij==0);
+% Pij(indices)=[];
+%% phase 4
+% Pij=normalize(Pij);
 beta=1-Pij;
+
+for i=1:clusters
+    for j=1:clusters
+        if i==j
+            continue
+        else
+            beta(i,j)=1-Pij(i,j);
+        end
+    end
+end
+beta=normalize(beta);
+% beta=double(1)-double(Pij);
+
+for i=1:clusters
+    for j=1:clusters
+        if i==j
+            beta(i,j)=0;
+        end
+    end
+end
 
 % window_size=;
 %Spatial gaussian mask
-spatch=zeros(size(im(:,:,1)));
+spatch=zeros((m-4),(n-4));
 % spatch=patch;
 % sigma_spat=m/3;
-sigma_spat=0.5;
+sigma_spat=100;
 row=1;
-ci=m/2;
-cj=n/2;
+ci=(m-4)/2;
+cj=(n-4)/2;
 %set up the spatial gaussian mask
 for i=1:size(im,1)
     col=1;
@@ -132,27 +157,33 @@ for i=1:size(im,1)
         pow=sqrt((i-ci)*(i-ci)+(j-cj)*(j-cj));
         pow=pow*pow;
 %         spatch(i,j)=-pow/(sigma_spat*sigma_spat);
-        spatch(i,j)=exp(-pow/(2*sigma_spat*sigma_spat));
+        spatch(i,j)=exp(-pow/(2*sigma_spat*sigma_spat))/(sigma_spat*sqrt(2*pi));
         col=col+1;
     end
     row=row+1;
 end
-
+center_dist=[];
  for iter=1:clusters
     indices=find(idx==iter);
-    center_dist(iter) = exp( ( -1/length(indices) ) * sum( spatch(indices) ) );
+%     den=sum(beta(iter,:));
+%     center_dist(iter) = mean(spatch(indices));
+    center_dist(iter)=exp( (-1/length(indices))*sum(spatch(indices)) );
+%     center_dist(iter) = exp( ( -1* mean( spatch(indices) ) ) );
  end
 alpha=zeros(clusters,1);
 for iter=1:clusters
     g=exp((-0.5)*(atoms(iter,:).^2)./sum(cov(iter,:)));
     Pix(iter)=g(1)*g(2)*g(3);
+%     indices=find(idx==iter);
+%     Pix(iter)=length(indices)/((m-4)*(n-4));
     for j=1:clusters
         if iter==j
             continue
         else
 %             alpha(iter)=alpha(iter)+beta(iter,j)*Pix(iter)*center_dist(iter);
 %             alpha(iter)=alpha(iter)+beta(iter,j)*center_dist(iter);
-            alpha(iter)=alpha(iter)+beta(iter,j)*center_dist(iter);
+            alpha(iter)=beta(iter,j)*center_dist(iter);
+%             alpha(iter)=alpha(iter)+beta(iter,j)*Pix(iter);
         end
     end
 end
@@ -161,10 +192,64 @@ saliency_map=zeros(1,(m-4)*(n-4));
 
  for iter=1:clusters
     indices=find(idx==iter);
-    saliency_map(indices)=alpha(iter);
+    saliency_map(indices)=alpha(iter); %.*spatch(indices);
  end
  saliency_map=reshape(saliency_map,m-4,n-4);
+%  saliency_map=saliency_map.*spatch(3:m-2,3:n-2);
 figure,imshow(mat2gray(saliency_map)),colorbar;
+
+% simi=zeros(clusters,1);
+% for iter=1:clusters
+%     g=exp((-0.5)*(atoms(iter,:).^2)./sum(cov(iter,:)));
+%     Pix(iter)=g(1)*g(2)*g(3);
+%     for j=1:clusters
+%         if iter==j
+%             continue
+%         else
+%             simi(iter)=simi(iter)+Pij(iter,j)*Pix(iter)*center_dist(iter);
+% %             alpha(iter)=alpha(iter)+beta(iter,j)*center_dist(iter);
+% %             alpha(iter)=beta(iter,j)*center_dist(iter);
+% %             alpha(iter)=alpha(iter)+beta(iter,j)*Pix(iter);
+%         end
+%     end
+% end
+% 
+% similarity_map=zeros(1,(m-4)*(n-4));
+% 
+%  for iter=1:clusters
+%     indices=find(idx==iter);
+%     similarity_map(indices)=simi(iter); %.*spatch(indices);
+%  end
+%  similarity_map=reshape(similarity_map,m-4,n-4);
+similarity_map=1-saliency_map;
+% figure,imshow(mat2gray(similarity_map)),colorbar;
+
+%% Adaptive thresholding
+
+mu = mean(saliency_map(:));
+sd = sqrt(var(saliency_map(:)));
+
+ada_thresh = mu + sd;
+threshold_map=saliency_map;
+indices=find(saliency_map>ada_thresh);
+threshold_map(indices)=1;
+indices=find(saliency_map<ada_thresh);
+threshold_map(indices)=0;
+
+figure,imshow(mat2gray(threshold_map)),colorbar;
+
+%% grabcut
+
+m1=m-4;
+n1=n-4;
+roi=boolean(zeros(m1,n1));
+roi(m1/4:3*m1/4,n1/4:3*n1/4)=true;
+find(spatch==0)
+% indices=find(roi==0);
+% roi(indi
+salient_img=grabcut(res_im,threshold_map,roi);
+
+figure,imshow(mat2gray(salient_img)),colorbar;
 
 %% feature matrix
 function feature_matrix=computeFeatures(im,m,n,window_size)
