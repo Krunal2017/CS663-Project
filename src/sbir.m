@@ -18,9 +18,9 @@ for i=3:length(D)% for each file in the directory(1 and 2 are '.' and '..')
      filename = strcat('../SampleImages/Butterfly/',D(i).name);
      X=imread(filename);
      %figure,imshow(X)
-     im = textureDistinctMap(X);
+     [im,mask] = textureDistinctMap(X);
      figure, imshow(im);
-     [image, Ix, Iy, x, y] = featureExtraction(double(im));
+     [image, Ix, Iy, x, y] = featureExtraction(double(im),mask);
      h = soh(Ix, Iy, x, y, window_size);
      score(i-2) = similarity_score(q_h, h);
      %disp(['Score: ',num2str(score)]);

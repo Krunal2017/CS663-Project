@@ -1,4 +1,4 @@
-function[image, Ix, Iy, x, y] = featureExtraction(im)
+function[image, Ix, Iy, x, y] = featureExtraction(im,mask)
     %Corner detection parameters
     sigma1 = 1.7;
     sigma2 = 0.8;

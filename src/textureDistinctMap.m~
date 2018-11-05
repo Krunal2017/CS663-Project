@@ -1,4 +1,4 @@
-function [result,threshold_map] = textureDistinctMap(im)
+function [result,] = textureDistinctMap(im)
     [m n p]=size(im);
     res_im=im(3:m-2,3:n-2,1:3);
     window_size=5;
