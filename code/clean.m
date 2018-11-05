@@ -116,7 +116,7 @@ center_dist=[];
     indices=find(idx==iter);
     center_dist(iter)=exp( (-1/length(indices))*sum(spatch(indices)) );
  end
- 
+
  alpha=zeros(clusters,1);
 for iter=1:clusters
     g=exp((-0.5)*(atoms(iter,:).^2)./sum(cov(iter,:)));
@@ -212,7 +212,7 @@ for j=3:n-2
         else
             y1=j-diff;
         end
-        
+
         A=im([x1:x2],[y1:y2]);
         [m1 n1]=size(A);
         layer2=A(1,1:4);
