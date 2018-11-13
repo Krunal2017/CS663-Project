@@ -12,7 +12,7 @@ mask=mask./mask;
 % figure, imshow(im);
 % figure, imshow(mask);
 [q_image, Ix, Iy, x, y] = featureExtraction(double(im),mask);
-% figure,imshow(mat2gray(q_image)),title('Query Image Salient points'), hold on, scatter(y,x,'filled','r');
+figure,imshow(mat2gray(q_image)),title('Query Image Salient points'), hold on, scatter(y,x,'filled');
 q_h = soh(Ix, Iy, x, y, window_size);
 %Process the database
 D = dir('../SampleImages/CoffeMug/WithMask/*.jpg'); % check dir command, in matlab documentation
@@ -33,17 +33,13 @@ for i=3:length(D)% for each file in the directory(1 and 2 are '.' and '..')
 %      figure, imshow(mask);
 
      [image, Ix, Iy, x, y] = featureExtraction(double(im),mask1);
-%      figure,imshow(mat2gray(image)),title('Salient points'), hold on, scatter(y,x,'filled','r');
+     figure,imshow(mat2gray(image)),title('Salient points'), hold on, scatter(y,x,'r.');
      h = soh(Ix, Iy, x, y, window_size);
-     s = similarity_score(q_h, h);
-     score(i-2)=s;
+     score(i-2) = similarity_score(q_h, h);
 %      disp('Score: ');
-%      disp(num2str(s));
-     if s>0
-         figure,imshow(mat2gray(image)),title('Found Image');
-         disp('Score: ');
-         disp(num2str(s));
-     end
+%      disp(num2str(h));
 end
 score = sum(score,2);
+disp('Score: ');
+disp(num2str(score));
 toc;

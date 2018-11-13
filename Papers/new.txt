@@ -1,0 +1,1 @@
+The k is the kth element of the mean vector. You are supposed to take gaussian with variance as variance between i and j and mean zero to calculate probability.

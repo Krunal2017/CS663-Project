@@ -1,5 +1,5 @@
 % im=imread('../src/1.jpg');
-im=imread('../SampleImages/Butterfly/10.jpg');
+im=imread('../SampleImages/Butterfly/2.jpg');
 [m n p]=size(im);
 res_im=im(3:m-2,3:n-2,1:3);
 window_size=5;
@@ -21,7 +21,19 @@ lab_image=cat(2,fmat(:,:,1),fmat(:,:,2));
 lab_image=cat(2,lab_image,fmat(:,:,3));
 
 lab_image=transpose(lab_image);
-
+restruct_mat=[];
+for j=1:size(lab_image,2)
+    l=1;
+    for i=1:25
+        restruct_mat(l,j)=lab_image(i,j);
+        l=l+1;
+        restruct_mat(l,j)=lab_image(i+25,j);
+        l=l+1;
+        restruct_mat(l,j)=lab_image(i+50,j);
+        l=l+1;
+    end
+end
+% lab_image=restruct_mat;
 xbar=mean(lab_image,2);
 mean_deducted=lab_image-xbar;
 % L=transpose(mean_deducted)*mean_deducted;
@@ -47,7 +59,7 @@ for iter=1:clusters
 end
 txanimg=transpose(animg);
 newimg=reshape(txanimg,m-4,n-4);
-% figure,imshow(mat2gray(newimg)),colorbar;
+figure,imshow(mat2gray(newimg)),colorbar;
 
 cov=[];
 % for j=1:clusters
@@ -143,7 +155,7 @@ saliency_map=zeros(1,(m-4)*(n-4));
 figure,imshow(mat2gray(saliency_map)),colorbar;
 
 %% manual thresholding
-threshold_map=zeros(size(saliency_map));indices=find(saliency_map==alpha(4));
+threshold_map=zeros(size(saliency_map));indices=find(saliency_map>mean(alpha));
 % threshold_map(indices)=spatch(indices);
 threshold_map(indices)=1;
 % threshold_map=threshold_map.*spatch(indices);
@@ -164,18 +176,18 @@ figure,imshow(mat2gray(threshold_map)),colorbar;
 
 %% grabcut
 
-m1=m-4;
-n1=n-4;
-roi=boolean(zeros(m1,n1));
-roi(m1/4:3*m1/4,n1/4:3*n1/4)=true;
-indices=find(spatch~=0);
-region=boolean(zeros(m1,n1));
-region(indices)=true;
-new=boolean(threshold_map);
-
-salient_img=grabcut(res_im,threshold_map,new);
-
-figure,imshow(mat2gray(salient_img)),colorbar;
+% m1=m-4;
+% n1=n-4;
+% roi=boolean(zeros(m1,n1));
+% roi(m1/4:3*m1/4,n1/4:3*n1/4)=true;
+% indices=find(spatch~=0);
+% region=boolean(zeros(m1,n1));
+% region(indices)=true;
+% new=boolean(threshold_map);
+% 
+% salient_img=grabcut(res_im,threshold_map,new);
+% 
+% figure,imshow(mat2gray(salient_img)),colorbar;
 
 %% feature matrix
 function feature_matrix=computeFeatures(im,m,n,window_size)
