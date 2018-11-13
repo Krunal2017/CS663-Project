@@ -14,7 +14,7 @@ function[image, Ix, Iy, x, y] = featureExtraction(im,mask)
     k = 0.16;
 
     %Feature extraction (Harris corner detection-sobel edge detection)
-    [image, Ix, Iy, ~, cornerness] = myHarrisCornerDetector(double(newim), sigma1, sigma2, k);
+    [image, Ix, Iy, ~, cornerness] = myHarrisCornerDetector(double(rgb2gray(newim)), sigma1, sigma2, k);
 
     %Feature point construction
     cornerness = (cornerness>1e-4);

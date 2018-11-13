@@ -14,10 +14,10 @@ q_im = imread('../SampleImages/CoffeMug/16.jpg');
 % figure(2), imshow(mat2gray(newim));
 % figure(3), imshow(mask);
 
-[q_image, Ix, Iy, x, y] = featureExtraction(double(im),mask);
-figure,imshow(mat2gray(mask.*im)),title('Query Image Salient points'), hold on, scatter(y,x,'filled','r');
+[q_image, Ix, Iy, x, y] = featureExtraction(double(q_im),mask);
+% figure,imshow(q_image),title('Query Image Salient points'), hold on, scatter(y,x,'filled','r');
 q_h = soh(Ix, Iy, x, y, window_size);
-Process the database
+% Process the database
 D = dir('../SampleImages/CoffeMug/WithMask/*.jpg'); % check dir command, in matlab documentation
 score = zeros(length(D)-2);
 D1 = dir('../SampleImages/CoffeMug/WithMask/*.png'); % check dir command, in matlab documentation
@@ -32,12 +32,12 @@ for i=3:length(D)% for each file in the directory(1 and 2 are '.' and '..')
      %figure,imshow(X)
      
      [im,mask1] = textureDistinctMap(X);
-     newim1=double(uint8(X).*uint8(mask1));
+%      newim1=double(uint8(X).*uint8(mask1));
 %     figure, imshow(mat2gray(newim1));
 %      figure, imshow(im);
 %      figure, imshow(mask1);
 
-     [image, Ix, Iy, x, y] = featureExtraction(double(im),mask1);
+     [image, Ix, Iy, x, y] = featureExtraction(double(X),mask1);
      cx=x;
      cy=y;
 %      figure,imshow(mat2gray(image)),title('Salient points'), hold on, scatter(y,x,'filled','r');
@@ -46,7 +46,7 @@ for i=3:length(D)% for each file in the directory(1 and 2 are '.' and '..')
      score(i-2)=s;
 %      disp('Score: ');
 %      disp(num2str(s));
-     if s==0
+     if s<0.5
 %          figure,imshow(mat2gray(image)),title('Salient points'), hold on, scatter(cy,cx,'filled','r');
          figure,imshow(mat2gray(image)),title('Found Image');
 %          disp('Score: ');
