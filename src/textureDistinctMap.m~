@@ -155,7 +155,6 @@ function [result,threshold_map] = textureDistinctMap(im)
     b=sqrt(var(var(result)));
     threshold_map=zeros(size(result));indices=find(result>a+b);
     threshold_map(indices)=1;
-    threshold_map=padarray(threshold_map,[2 2],0,'both');
 %     mu = mean(mean(saliency_map));
 %     sd = sqrt(var(var(saliency_map)));
 %     ada_thresh= mu +sd;
@@ -165,7 +164,22 @@ function [result,threshold_map] = textureDistinctMap(im)
 %     indices=find(saliency_map<ada_thresh);
 %     threshold_map(indices)=0;
 
-%     figure,imshow(mat2gray(threshold_map)),colorbar;
+    figure,imshow(mat2gray(threshold_map)),colorbar;
+
+    %% Grabcut Segmentation
+    
+    m1=m-4;
+    n1=n-4;
+    roi=boolean(zeros(m1,n1));
+    roi(m1/4:3*m1/4,n1/4:3*n1/4)=true;
+    indices=find(spatch~=0);
+    region=boolean(zeros(m1,n1));
+    region(indices)=true;
+    new=boolean(threshold_map);
+    
+    salient_img=grabcut(res_im,threshold_map,new);
+    
+    figure,imshow(mat2gray(salient_img)),colorbar;
 
     %% feature matrix
     function feature_matrix=computeFeatures(im,m,n,window_size)
