@@ -96,7 +96,7 @@ function [result,threshold_map] = textureDistinctMap(im)
     %Spatial gaussian mask
     spatch=zeros((m-4),(n-4));
     % sigma_spat=m/3;
-    sigma_spat=20;
+    sigma_spat=100;
     row=1;
     ci=(m-4)/2;
     cj=(n-4)/2;
@@ -154,17 +154,40 @@ function [result,threshold_map] = textureDistinctMap(im)
 
     %% Adaptive thresholding
 
-    mu=mean(mean(result));
-    sd=sqrt(var(var(result)));
-    ada_thresh=mu+sd;
-    threshold_map=zeros(size(result));indices=find(result>ada_thresh);
+    a=mean(mean(result));
+    b=sqrt(var(var(result)));
+    threshold_map=zeros(size(result));indices=find(result>a+b);
     threshold_map(indices)=1;
+%     threshold_map=padarray(threshold_map,[2 2],0,'both');
+%     mu = mean(mean(saliency_map));
+%     sd = sqrt(var(var(saliency_map)));
+%     ada_thresh= mu +sd;
+%     threshold_map=zeros(size(saliency_map));
+%     indices=find(saliency_map>ada_thresh);
+%     threshold_map(indices)=1;
+%     indices=find(saliency_map<ada_thresh);
+%     threshold_map(indices)=0;
+
+%     figure,imshow(mat2gray(threshold_map)),colorbar;
+
+%% Grabcut Segmentation of Original Image
+roi=boolean(zeros(m1,n1));
+roi(m1/8:7*m1/8,n1/8:7*n1/8)=true; 
+L = superpixels(im,500);
+BW = grabcut(im,L,roi);
+% figure,imshow(BW);
+
+%% Grabcut Segmentation of saliency_map
+roi=boolean(zeros(m1,n1));
+roi(m/8:7*m/8,n/8:7*n/8)=true; 
+L = superpixels(im,500);
+BW = grabcut(im,L,roi);
+
 %% Grabcut Segmentation of thresholded mask
-    [m1,n1,p1]=size(res_im);
-    roi=boolean(zeros(m1,n1));
-    roi(1*m1/4:3*m1/4,1*n1/4:3*n1/4)=true; 
-    L = superpixels(res_im,200);
-    thres_mask = grabcut(res_im,L,roi);
+roi=boolean(zeros(m,n));
+roi(m/8:7*m/8,n/8:7*n/8)=true; 
+L = superpixels(im,500);
+BW = grabcut(im,L,roi);
 
     %% feature matrix
     function feature_matrix=computeFeatures(im,m,n,window_size)
