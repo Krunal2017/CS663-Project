@@ -36,7 +36,7 @@ function [result,threshold_map] = textureDistinctMap(im)
 
     %% clustering
     clusters=20;
-    idx=kmeans(transformedspace,clusters,'start','uniform');
+    idx=kmeans(transformedspace,clusters,'start','plus');
     animg=zeros([(m-4)*(n-4),1]);
     atoms=[];
 

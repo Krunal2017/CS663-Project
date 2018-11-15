@@ -28,7 +28,8 @@ for i=3:length(D)% for each file in the directory(1 and 2 are '.' and '..')
 %      figure,imshow(mat2gray(image)),title('Salient points'), hold on, scatter(y,x,'filled','r');
 
      h = soh(Ix, Iy, x, y, window_size);
-     s = similarity_score(q_h, h);
+     norm_thres=0.5;    % can be 0.5 for squared diff or 0.9 of normalized diff
+     [s] = similarity_score(q_h, h, norm_thres);
      score(i-2)=s;
      if s<0.5
 %          figure,imshow(mat2gray(image)),title('Salient points'), hold on, scatter(cy,cx,'filled','r');
