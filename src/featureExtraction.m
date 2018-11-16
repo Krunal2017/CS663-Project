@@ -9,10 +9,11 @@ function[image, Ix, Iy, x, y] = featureExtraction(im,mask)
         mask=padarray(mask,[0 diff],0,'post');
     end
     if mask==zeros(size(mask))
-        newim=im;
+        newim=mat2gray(im);
     else
-        newim=uint8(im).*uint8(mask);
+        newim=mat2gray(uint8(im).*uint8(mask));
     end
+%     figure,imshow(mat2gray(newim));
     sigma1 = 1.7;
     sigma2 = 0.8;
     k = 0.16;
