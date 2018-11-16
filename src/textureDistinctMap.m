@@ -5,23 +5,56 @@ function [result,threshold_map] = textureDistinctMap(im)
     n1=n-4;
     res_im=im(3:m-2,3:n-2,1:3);
     window_size=5;
-    fmat=zeros((m-4)*(n-4),25,p);
-%     f = waitbar(0,"Please Wait...");
+    padded_im=padarray(im,[0,0],0,'both');
 
-    for iter=1:p
-%         msg=strcat('Processing Channel-',num2str(iter));
-%         f = waitbar(iter/p,f,msg);
-        fmat(:,:,iter)=computeFeatures(im(:,:,iter),m,n,window_size);
-    end
-%     close(f);
+    l1=im2col(padded_im(:,:,1),[5 5]);
+    l1([1 13],:) = l1([13 1],:);
+    layer2=cat(1,l1(2:6,:),l1(22:25,:));
+    layer2=cat(1,layer2,l1([7,11,12,16,17,21],:));
+    layer1=[];
+    layer1=cat(1,layer1,l1([8,9,10,13,14,15,18,19,20],:));
+    l1(2:end,:)=cat(1,sort(layer1),sort(layer2));
+    % l1(2:end,:)=sort(l1(2:end,:));
 
-    % using myPCA method
+    l2=im2col(padded_im(:,:,2),[5 5]);
+    l2([1 13],:) = l2([13 1],:);
+    layer2=cat(1,l2(2:6,:),l2(22:25,:));
+    layer2=cat(1,layer2,l2([7,11,12,16,17,21],:));
+    layer1=[];
+    layer1=cat(1,layer1,l2([8,9,10,13,14,15,18,19,20],:));
+    l2(2:end,:)=cat(1,sort(layer1),sort(layer2));
+    % l2(2:end,:)=sort(l2(2:end,:));
+
+    l3=im2col(padded_im(:,:,3),[5 5]);
+    l3([1 13],:) = l3([13 1],:);
+    layer2=cat(1,l3(2:6,:),l3(22:25,:));
+    layer2=cat(1,layer2,l3([7,11,12,16,17,21],:));
+    layer1=[];
+    layer1=cat(1,layer1,l3([8,9,10,13,14,15,18,19,20],:));
+    l3(2:end,:)=cat(1,sort(layer1),sort(layer2));
+    % l3(2:end,:)=sort(l3(2:end,:));
 
     lab_image=[];
-    lab_image=cat(2,fmat(:,:,1),fmat(:,:,2));
-    lab_image=cat(2,lab_image,fmat(:,:,3));
+    lab_image=cat(1,l1,l2);
+    lab_image=double(cat(1,lab_image,l3));
 
-    lab_image=transpose(lab_image);
+%     fmat=zeros((m-4)*(n-4),25,p);
+% %     f = waitbar(0,"Please Wait...");
+% 
+%     for iter=1:p
+% %         msg=strcat('Processing Channel-',num2str(iter));
+% %         f = waitbar(iter/p,f,msg);
+%         fmat(:,:,iter)=computeFeatures(im(:,:,iter),m,n,window_size);
+%     end
+% %     close(f);
+% 
+%     % using myPCA method
+% 
+%     lab_image=[];
+%     lab_image=cat(2,fmat(:,:,1),fmat(:,:,2));
+%     lab_image=cat(2,lab_image,fmat(:,:,3));
+% 
+%     lab_image=transpose(lab_image);
 
     xbar=mean(lab_image,2);
     mean_deducted=lab_image-xbar;
@@ -161,7 +194,7 @@ function [result,threshold_map] = textureDistinctMap(im)
     threshold_map(indices)=1;
 %% Grabcut Segmentation of thresholded mask
     [m1,n1,p1]=size(res_im);
-    roi=boolean(zeros(m1,n1));
+    roi=logical(zeros(m1,n1));
     roi(1*m1/4:3*m1/4,1*n1/4:3*n1/4)=true; 
     L = superpixels(res_im,200);
     thres_mask = grabcut(res_im,L,roi);

@@ -8,7 +8,11 @@ function[image, Ix, Iy, x, y] = featureExtraction(im,mask)
         diff=abs(size(im,2)-size(mask,2));
         mask=padarray(mask,[0 diff],0,'post');
     end
-    newim=uint8(im).*uint8(mask);
+    if mask==zeros(size(mask))
+        newim=im;
+    else
+        newim=uint8(im).*uint8(mask);
+    end
     sigma1 = 1.7;
     sigma2 = 0.8;
     k = 0.16;
