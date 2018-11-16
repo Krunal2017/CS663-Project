@@ -26,11 +26,11 @@ for i=1:N% for each file in the directory(1 and 2 are '.' and '..')
      filename = strcat('../../THUR15000/CoffeeMug/Src/',D(i).name);
      X=double(imread(filename));
      [im,mask1] = textureDistinctMap(X);
-     if size(im,1)<1000
-         a=1000-size(im,1);
+     if size(im,1)<800
+         a=800-size(im,1);
      end
-     if size(im,2)<1000
-         b=1000-size(im,2);
+     if size(im,2)<1028
+         b=1028-size(im,2);
      end
      padded_im=padarray(im,[a/2,b/2],0,'both');
      padded_mask=padarray(mask1,[a/2,b/2],0,'both');
@@ -42,7 +42,7 @@ for i=1:N% for each file in the directory(1 and 2 are '.' and '..')
 %      figure,imshow(mat2gray(image)),title('Salient points'), hold on, scatter(y,x,'filled','r');
 
      h = soh(Ix, Iy, x, y, window_size);
-     SALIENCY_HISOGRAMS(:,:,i)=h;
+     SALIENCY_HISTOGRAMS(:,:,i)=h;
 %      norm_thres=0.5;    % can be 0.5 for squared diff or 0.9 of normalized diff
 %      [s] = similarity_score(q_h, h, norm_thres);
 %      score(i-2)=s;
