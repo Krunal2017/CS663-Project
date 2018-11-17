@@ -1,6 +1,5 @@
-1. Correct ROI construction
-2. MHEC Dectection
-3. RMod edge map
-4. QC-histogram distance
-5. Threshold setting for retrieval
-6. Precision and Recall Computation
+1. MHEC Dectection
+2. RMod edge map
+3. Top 50 and 100 images retrieval
+4. True positive count
+5. Precision and Recall Computation for segmentation
