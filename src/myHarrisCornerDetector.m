@@ -28,7 +28,8 @@ function [image ,Ix, Iy, eigen_value, cornerness] = myHarrisCornerDetector(origi
             M = [Ixx(i,j), Ixy(i,j); Ixy(i,j), Iyy(i,j)];
             e = eig(M);
             eigen_value(i,j,:) = [e(1),e(2)];
-            corners(i,j) = det(M) - k*trace(M)*trace(M);
+            corners(i,j) = max(e(1),e(2));
+%             corners(i,j) = det(M) - k*trace(M)*trace(M);
         end
     end
 
