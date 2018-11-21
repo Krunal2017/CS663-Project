@@ -2,7 +2,7 @@
 tic;
 
 window_size = 8;
-keyword = 'DogJump';
+keyword = 'plane';
 database_dir = '../../../THUR15000/';
 
 % Process the database
