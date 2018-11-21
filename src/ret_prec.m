@@ -36,7 +36,7 @@ function [prec] = ret_prec(score_struct_sorted, D, top_im_num, keyword, database
             ret_total = ret_total + 1;
         end
     end   
-    
-    prec = (ret_total / true_total)*100;
+
+    prec = (ret_total / top_im_num)*100;
 
 end
