@@ -11,7 +11,7 @@ function [prec] = ret_prec(score_struct_sorted, D, top_im_num, keyword, database
     Dr_struct = struct();
     
     %Database Directory
-    dir_name = strcat(strcat(database_dir,keyword),'/');
+    dir_name = strcat(strcat(database_dir,keyword),'/Src/');
     
     %Find Ground Truth
     for i=1:N

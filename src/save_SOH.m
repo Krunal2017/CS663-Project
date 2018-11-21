@@ -2,7 +2,7 @@
 tic;
 
 window_size = 8;
-keyword = 'Butterfly';
+keyword = 'CoffeeMug';
 database_dir = '../SampleImages/';
 
 % Process the database
@@ -14,7 +14,11 @@ N=floor(length(D));
 %ADA_THRES_MASKS=[];
 %SALIENCY_MAPS=[];
 SALIENCY_HISTOGRAMS=[];
+f = waitbar(0,"Please Wait...");
+
 for i=1:N
+    msg=strcat('Computing SOH ',num2str(i),'/',num2str(N));
+    f = waitbar(i/N,f,msg);
      filename = strcat(strcat(dir_name,'/'),D(i).name);
      X=double(imread(filename));
      [im,mask1] = textureDistinctMap(X);
@@ -36,8 +40,8 @@ for i=1:N
      h = soh(Ix, Iy, x, y, window_size);
      SALIENCY_HISTOGRAMS(:,:,i)=h;
 end
-
-soh_file = strcat(strcat('../SOH_save/',keyword),'_harris_sal_hists.mat');
+close(f);
+soh_file = strcat(strcat('../SOH_save/',keyword),'_200_mhec_sal_hists.mat');
 %save('../SOH_save/train_harris_sal_maps.mat','SALIENCY_MAPS');
 %save('../SOH_save/train_harris_sal_masks.mat','ADA_THRES_MASKS');
 save(soh_file,'SALIENCY_HISTOGRAMS');

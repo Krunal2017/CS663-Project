@@ -4,25 +4,25 @@ tic;
 window_size = 8;
 top_im_num = 100;
 norm_thres = 0.5;
-keyword = 'Butterfly';
+keyword = 'DogJump';
 database_dir = '../SampleImages/';
 
 %Database Directory
 dir_name = strcat(database_dir,keyword);
 
 %Query image
-q_im = imread(strcat(dir_name,'/10.jpg'));
+q_im = imread('../../../THUR15000/DogJump/Src/1006.jpg');
 [im, mask] = textureDistinctMap(q_im);
 [q_image, Ix, Iy, x, y] = featureExtraction(double(q_im),mask); 
 q_h = soh(Ix, Iy, x, y, window_size);
 
 % Load the database SOH
-soh_dir = strcat(strcat('../SOH_save/',keyword),'_harris_sal_hists.mat');
+soh_dir = strcat(strcat('../SOH_save/',keyword),'_full_mhec_sal_hists.mat');
 H = load(soh_dir);
 %score = zeros(length(D),1);
 score_struct = struct();
 
-D = dir(strcat(dir_name,'/*.jpg'));
+D = dir(strcat('../../../THUR15000/DogJump/Src','/*.jpg'));
 N=floor(length(D));
 
 for i=1:N
@@ -43,7 +43,7 @@ for j=1:top_im_num
     %figure,imshow(X),title('Found Image');
 end
 
-prec = ret_prec(score_struct_sorted, D, top_im_num, keyword, database_dir);
+prec = ret_prec(score_struct_sorted, D, top_im_num, keyword, '../../../THUR15000/');
 
 disp('Precision:');
 disp(prec);
