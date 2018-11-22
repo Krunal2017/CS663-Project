@@ -4,12 +4,13 @@ tic;
 window_size = 8;
 norm_thres = 0.5;
 top_im_num = 100;
-keyword = 'Giraffe';
+keyword = 'DogJump';
 database_dir = '../TestImages/';
 
 %Database Directory
 dir_name = strcat(database_dir,keyword);
 D1=dir(strcat(dir_name,'/*.jpg'));
+precisions=[];
 % iter=1;
 %%
 for ind=1:length(D1)
@@ -24,7 +25,7 @@ q_im = imread(strcat(dir_name,'/',D1(ind).name));
 q_h = soh(Ix, Iy, x, y, window_size);
 
 % Load the database SOH
-soh_dir = strcat(strcat('../MHEC_SOH/',keyword),'_full_mhec_sal_hists.mat');
+soh_dir = strcat(strcat('../SOH_save/mhec/',keyword),'_full_mhec_sal_hists.mat');
 H = load(soh_dir);
 %score = zeros(length(D),1);
 score_struct = struct();

@@ -4,17 +4,17 @@ tic;
 window_size = 8;
 norm_thres = 0.5;
 top_im_num = 100;
-keyword = 'Giraffe';
+keyword = 'DogJump';
 database_dir = '../TestImages/';
 
 %Database Directory
 dir_name = strcat(database_dir,keyword);
-D=dir(dir_name)
-iter=1;
+D1=dir(strcat(dir_name,'/*.jpg'));
+% iter=1;
 %%
-for ind=1:length(D)
+for ind=1:length(D1)
 %Query image
-q_im = imread(strcat(dir_name,));
+q_im = imread(strcat(dir_name,'/',D1(ind).name));
 % figure,imshow(mat2gray(q_im));
 [im, mask] = textureDistinctMap(q_im);
 % figure, imshow(mat2gray(im));
@@ -24,7 +24,7 @@ q_im = imread(strcat(dir_name,));
 q_h = soh(Ix, Iy, x, y, window_size);
 
 % Load the database SOH
-soh_dir = strcat(strcat('../MHEC_SOH/',keyword),'_full_mhec_sal_hists.mat');
+soh_dir = strcat(strcat('../SOH_save/mhec/',keyword),'_full_mhec_sal_hists.mat');
 H = load(soh_dir);
 %score = zeros(length(D),1);
 score_struct = struct();
@@ -52,8 +52,8 @@ end
 
 prec = ret_prec(score_struct_sorted, D, top_im_num, keyword, '../../../THUR15000/');
 
-precisions(iter)=prec;
-iter=iter+1;
+precisions(ind)=prec;
+% iter=iter+1;
 end
 disp('Precision:');
 disp(max(precisions));
