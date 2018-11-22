@@ -2,7 +2,7 @@
 tic;
 
 window_size = 8;
-keyword = 'plane';
+keyword = 'CoffeeMug';
 database_dir = '../../../THUR15000/';
 
 % Process the database
@@ -19,9 +19,12 @@ for i=1:N
     f = waitbar(i/N,f,msg);
      filename = strcat(strcat(dir_name,'/Src/'),D(i).name);
      X=double(imread(filename));
-     filename = strcat('../output_texture/',keyword,'/masks/',D(i).name);
-     mask1 = imread(filename);
-%      [im,mask1] = textureDistinctMap(X);
+%      filename = strcat('../output_texture/',keyword,'/maps/',D(i).name);
+%      im = double(imread(filename));
+%      mask1 = gen_mask(im);
+     [im,mask1] = textureDistinctMap(X);
+     imwrite(im,strcat('../output_texture/CoffeeMug/maps/',D(i).name));
+     imwrite(mask1,strcat('../output_texture/CoffeeMug/masks/',D(i).name));
      [image, Ix, Iy, x, y] = featureExtraction(double(X),mask1);
      cx=x;
      cy=y;
