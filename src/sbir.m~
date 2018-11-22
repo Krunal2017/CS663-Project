@@ -9,9 +9,7 @@ database_dir = '../SampleImages/';
 
 %Database Directory
 dir_name = strcat(database_dir,keyword);
-iter=1;
-%%
-for ind=154:160
+for ind=1:50
 %Query image
 q_im = imread(strcat('../../../THUR15000/',keyword,'/Src/',num2str(ind),'.jpg'));
 % figure,imshow(mat2gray(q_im));
@@ -51,8 +49,7 @@ end
 
 prec = ret_prec(score_struct_sorted, D, top_im_num, keyword, '../../../THUR15000/');
 
-precisions(iter)=prec;
-iter=iter+1;
+precisions(ind)=prec;
 end
 disp('Precision:');
 disp(max(precisions));

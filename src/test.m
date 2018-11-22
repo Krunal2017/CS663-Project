@@ -5,15 +5,16 @@ window_size = 8;
 norm_thres = 0.5;
 top_im_num = 100;
 keyword = 'Giraffe';
-database_dir = '../SampleImages/';
+database_dir = '../TestImages/';
 
 %Database Directory
 dir_name = strcat(database_dir,keyword);
-iter=1;
+D1=dir(strcat(dir_name,'/*.jpg'));
+% iter=1;
 %%
-for ind=154:160
+for ind=1:length(D1)
 %Query image
-q_im = imread(strcat('../../../THUR15000/',keyword,'/Src/',num2str(ind),'.jpg'));
+q_im = imread(strcat(dir_name,'/',D1(ind).name));
 % figure,imshow(mat2gray(q_im));
 [im, mask] = textureDistinctMap(q_im);
 % figure, imshow(mat2gray(im));
@@ -51,8 +52,8 @@ end
 
 prec = ret_prec(score_struct_sorted, D, top_im_num, keyword, '../../../THUR15000/');
 
-precisions(iter)=prec;
-iter=iter+1;
+precisions(ind)=prec;
+% iter=iter+1;
 end
 disp('Precision:');
 disp(max(precisions));
