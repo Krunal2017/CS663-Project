@@ -4,14 +4,15 @@ tic;
 window_size = 8;
 norm_thres = 0.5;
 top_im_num = 100;
-keyword = 'Giraffe';
+keyword = 'DogJump';
 database_dir = '../SampleImages/';
 
 %Database Directory
 dir_name = strcat(database_dir,keyword);
 iter=1;
+precisions=[];
 %%
-for ind=154:160
+for ind=42:50
 %Query image
 q_im = imread(strcat('../../../THUR15000/',keyword,'/Src/',num2str(ind),'.jpg'));
 % figure,imshow(mat2gray(q_im));
@@ -23,7 +24,7 @@ q_im = imread(strcat('../../../THUR15000/',keyword,'/Src/',num2str(ind),'.jpg'))
 q_h = soh(Ix, Iy, x, y, window_size);
 
 % Load the database SOH
-soh_dir = strcat(strcat('../MHEC_SOH/',keyword),'_full_mhec_sal_hists.mat');
+soh_dir = strcat(strcat('../SOH_save/mhec/',keyword),'_full_mhec_sal_hists.mat');
 H = load(soh_dir);
 %score = zeros(length(D),1);
 score_struct = struct();
