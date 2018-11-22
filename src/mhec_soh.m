@@ -2,7 +2,7 @@
 tic;
 
 window_size = 8;
-keyword = 'CoffeeMug';
+keyword = 'Giraffe';
 database_dir = '../../../THUR15000/';
 
 % Process the database
@@ -19,12 +19,12 @@ for i=1:N
     f = waitbar(i/N,f,msg);
      filename = strcat(strcat(dir_name,'/Src/'),D(i).name);
      X=double(imread(filename));
-%      filename = strcat('../output_texture/',keyword,'/maps/',D(i).name);
-%      im = double(imread(filename));
+     filename = strcat('../output_texture/',keyword,'/masks/',D(i).name);
+     mask1 = double(imread(filename));
 %      mask1 = gen_mask(im);
-     [im,mask1] = textureDistinctMap(X);
-     imwrite(im,strcat('../output_texture/CoffeeMug/maps/',D(i).name));
-     imwrite(mask1,strcat('../output_texture/CoffeeMug/masks/',D(i).name));
+%      [im,mask1] = textureDistinctMap(X);
+%      imwrite(im,strcat('../output_texture/CoffeeMug/maps/',D(i).name));
+%      imwrite(mask1,strcat('../output_texture/CoffeeMug/masks/',D(i).name));
      [image, Ix, Iy, x, y] = featureExtraction(double(X),mask1);
      cx=x;
      cy=y;
@@ -34,7 +34,7 @@ for i=1:N
      SALIENCY_HISTOGRAMS(:,:,i)=h;
 end
 close(f);
-soh_file = strcat(strcat('../SOH_save/',keyword),'_full_mhec_sal_hists.mat');
+soh_file = strcat(strcat('../MHEC_SOH/',keyword),'_full_mhec_sal_hists-2.mat');
 save(soh_file,'SALIENCY_HISTOGRAMS');
 
 toc;

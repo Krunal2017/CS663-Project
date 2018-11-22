@@ -20,15 +20,15 @@ function[image, Ix, Iy, x, y] = featureExtraction(im,mask)
 
     %Feature extraction (Harris corner detection-sobel edge detection)
     [image, Ix, Iy, ~, cornerness] = myHarrisCornerDetector(double(rgb2gray(newim)), sigma1, sigma2, k);
-%     disp('Before');
-%     disp(strcat( 'Mean:', num2str(mean(cornerness(:))) ) );
-%     disp(strcat( 'Min:', num2str(min(cornerness(:))) ) );
-%     disp(strcat( 'Max:', num2str(max(cornerness(:))) ) );
+    disp('Before');
+    disp(strcat( 'Mean:', num2str(mean(cornerness(:))) ) );
+    disp(strcat( 'Min:', num2str(min(cornerness(:))) ) );
+    disp(strcat( 'Max:', num2str(max(cornerness(:))) ) );
     %Feature point construction
     cornerness = (cornerness>1e-4);
-%     disp('After');
-%     disp(strcat( 'Mean:', num2str(mean(cornerness(:))) ) );
-%     disp(strcat( 'Min:', num2str(min(cornerness(:))) ) );
-%     disp(strcat( 'Max:', num2str(max(cornerness(:))) ) );
+    disp('After');
+    disp(strcat( 'Mean:', num2str(mean(cornerness(:))) ) );
+    disp(strcat( 'Min:', num2str(min(cornerness(:))) ) );
+    disp(strcat( 'Max:', num2str(max(cornerness)) ) );
     [x,y] = find(cornerness);
 end

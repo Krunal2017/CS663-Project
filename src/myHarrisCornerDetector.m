@@ -1,9 +1,10 @@
 function [image ,Ix, Iy, eigen_value, cornerness] = myHarrisCornerDetector(original_img, sigma1, sigma2, k)
 
     % rescale the intensities in the image to lie within the range [0, 1]
-    minIntensity = min(original_img(:));
-    maxIntensity = max(original_img(:));
-    image = (original_img - minIntensity)/(maxIntensity - minIntensity);
+%     minIntensity = min(original_img(:));
+%     maxIntensity = max(original_img(:));
+%     image = (original_img - minIntensity)/(maxIntensity - minIntensity);
+    image = original_img;
 
     % smoothen the image
     filt1 = fspecial('gaussian', 2*ceil(3*sigma1)+1, sigma1);
