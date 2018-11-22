@@ -30,8 +30,8 @@ for i=1:N
      cy=y;
      figure,imshow(mat2gray(image)),title('Salient points'), hold on, scatter(y,x,'filled','r');
 
-     h = soh(Ix, Iy, x, y, window_size);
-     SALIENCY_HISTOGRAMS(:,:,i)=h;
+%      h = soh(Ix, Iy, x, y, window_size);
+%      SALIENCY_HISTOGRAMS(:,:,i)=h;
 end
 close(f);
 soh_file = strcat(strcat('../MHEC_SOH/',keyword),'_full_mhec_sal_hists-2.mat');
