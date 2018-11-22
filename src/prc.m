@@ -44,8 +44,6 @@ indices=find(scores<0.08);
 labels=zeros(M,N);
 labels(indices)=1;
 acc=labels==subGT;
-% accuracy=sum(acc)*100/length(acc);
-% disp(strcat('Accuracy: ',num2str(accuracy),' %'));
 
 %%
 trueLabels=GT(M+1:M+N);

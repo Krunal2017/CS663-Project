@@ -4,7 +4,6 @@ function [image ,Ix, Iy, eigen_value, cornerness] = myHarrisCornerDetector(origi
     minIntensity = min(original_img(:));
     maxIntensity = max(original_img(:));
     image = (original_img - minIntensity)/(maxIntensity - minIntensity);
-%     image = original_img;
 
     % smoothen the image
     filt1 = fspecial('gaussian', 2*ceil(3*sigma1)+1, sigma1);
@@ -30,7 +29,6 @@ function [image ,Ix, Iy, eigen_value, cornerness] = myHarrisCornerDetector(origi
             e = eig(M);
             eigen_value(i,j,:) = [e(1),e(2)];
             corners(i,j) = max(e(1),e(2));
-%             corners(i,j) = det(M) - k*trace(M)*trace(M);
         end
     end
 

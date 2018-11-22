@@ -1,8 +1,8 @@
 %% SBIR FOR QUERY IMAGE
 tic;
 
-% images = [171;179;2234;2240];
-% path = '../TestImages/Butterfly/';
+images = [171;179;2234;2240];
+path = '../TestImages/Butterfly/';
 % images = [101;105;108;111;113;1140;2231;2246;3143];
 % path = '../TestImages/CoffeeMug/';
 % images = [2;3;4;7;8;17;18;21;24;32;40;44;47;49];

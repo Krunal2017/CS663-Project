@@ -5,28 +5,23 @@ window_size = 8;
 norm_thres = 0.5;
 top_im_num = 100;
 keyword = 'DogJump';
-database_dir = '../SampleImages/';
-
+database_dir = '../TestImages/';
+ind = 44;
 %Database Directory
 dir_name = strcat(database_dir,keyword);
 iter=1;
 precisions=[];
 %%
-for ind=42:50
+
 %Query image
-q_im = imread(strcat('../../../THUR15000/',keyword,'/Src/',num2str(ind),'.jpg'));
-% figure,imshow(mat2gray(q_im));
+q_im = imread(strcat(database_dir,keyword,'/',num2str(ind),'.jpg'));
 [im, mask] = textureDistinctMap(q_im);
-% figure, imshow(mat2gray(im));
-% figure, imshow(mat2gray(mask));
 [q_image, Ix, Iy, x, y] = featureExtraction(double(q_im),mask); 
-% figure,imshow(mat2gray(q_image)),title('Salient points'), hold on, scatter(y,x,'filled','r');
 q_h = soh(Ix, Iy, x, y, window_size);
 
 % Load the database SOH
 soh_dir = strcat(strcat('../SOH_save/mhec/',keyword),'_full_mhec_sal_hists.mat');
 H = load(soh_dir);
-%score = zeros(length(D),1);
 score_struct = struct();
 
 D = dir(strcat('../../../THUR15000/',keyword,'/Src/*.jpg'));
@@ -46,16 +41,10 @@ score_struct_sorted = table2struct(T_sorted);
 
 for j=1:top_im_num
     filename = strcat(strcat(dir_name,'/'),score_struct_sorted(j).name);
-    %X = imread(filename);
-    %figure,imshow(X),title('Found Image');
 end
 
 prec = ret_prec(score_struct_sorted, D, top_im_num, keyword, '../../../THUR15000/');
-
-precisions(iter)=prec;
-iter=iter+1;
-end
 disp('Precision:');
-disp(max(precisions));
+disp(prec);
 
 toc;

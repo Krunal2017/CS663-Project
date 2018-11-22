@@ -27,7 +27,6 @@ function [s] = soh(Ix, Iy, x, y, window_size)
                 w_dense = z / u;
 
                 %Major orientation and histogram of ith feature point
-                %[maj_val ,~] = max(w_dense);
                 if(prev < w_dense)
                     prev = w_dense;
                     maj_orient(i) = j;
