@@ -9,4 +9,9 @@ hist=cat(3,hist, H4.TEST_SALIENCY_HISTOGRAMS);
 
 save('../SOH_save/CoffeeMug_harris_sal_hist.mat', 'hist');
 
+dir_name = '../../../Corel100/';
+D = dir(strcat(dir_name,'*.jpg')); % check dir command, in matlab documentation
 
+N=floor(length(D)); % Save files in 3 parts 1:N1, N1+1:N2, N2+1:N
+N1=floor(length(D))/3;
+N2=2*N1;

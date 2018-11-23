@@ -15,9 +15,9 @@ precisions=[];
 
 %Query image
 %q_im = imread(strcat(database_dir,keyword,'/',num2str(ind),'.jpg'));
+q_im = imread('../../../Corel100/0_20.jpg');
 arr = [0,10:19,2,20:29,3,30:39,4,40:49,5,50:59,6,60:69,7,70:79,8,80:89,9,90:99];
-k = '87';
-q_im = imread(strcat('../../../Corel100/',k,'_8717.jpg'));
+k = '0';
 [im, mask] = textureDistinctMap(q_im);
 [q_image, Ix, Iy, x, y] = featureExtraction(double(q_im),mask); 
 figure;
@@ -71,14 +71,14 @@ figure;
 for j=1:top_im_num
     if top_indices(j)<101
         D1 = dir(strcat('../../../Corel100/',k,'_*.jpg'));
-        filename=strcat('../../../Corel100/',D1(top_indices(j)).name);
+        filename=D1(top_indices(j)).name;
 %         num=strcat(k,'_',num2str(top_indices(j)) );
     else
         n=str2num(k);
         ind=find(arr==n);
-        next=num2str(arr(ind+1));
-        D1 = dir(strcat('../../../Corel100/',next,'_*.jpg'));
-        filename=strcat('../../../Corel100/',D1(top_indices(j)-100).name);
+        next=arr(ind+1);
+        D1 = dir(strcat('../../../Corel100/',n,'_*.jpg'));
+        filename=D1(top_indices(j)-100).name;
     end
 %         num=strcat(n,'_',num2str(top_indices(j)-100);
 %     filename = strcat(dir_name1,num);
