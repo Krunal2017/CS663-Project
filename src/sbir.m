@@ -42,7 +42,8 @@ for i=1:100
     hist = H.SALIENCY_HISTOGRAMS(:,:,starting:ending);
     n=D(starting).name;
     num=strrep(n,'.jpg','');
-    save(strcat('../SOH_save/corel_split/class_',num2str(starting),'.mat'),'hist');
+    C = strsplit(num,'_');
+    save(strcat('../SOH_save/corel_split/class_',string(C(1)),'.mat'),'hist');
 %     [s] = similarity_score(q_h, h, norm_thres);
 %     score_struct(i).name = D(i).name;
 %     score_struct(i).hist = h;
