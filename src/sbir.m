@@ -17,6 +17,13 @@ precisions=[];
 q_im = imread(strcat(database_dir,keyword,'/',num2str(ind),'.jpg'));
 [im, mask] = textureDistinctMap(q_im);
 [q_image, Ix, Iy, x, y] = featureExtraction(double(q_im),mask); 
+
+figure;
+subplot(1,4,1), imshow(mat2gray(q_im));
+subplot(1,4,2), imshow(mat2gray(im));
+subplot(1,4,3), imshow(mat2gray(mask));
+subplot(1,4,4), imshow(mat2gray(q_im)),title('Salient points'), hold on, scatter(y,x,'filled','r.');
+
 q_h = soh(Ix, Iy, x, y, window_size);
 
 % Load the database SOH
@@ -24,6 +31,7 @@ soh_dir = strcat(strcat('../SOH_save/mhec/',keyword),'_full_mhec_sal_hists.mat')
 H = load(soh_dir);
 score_struct = struct();
 
+dir_name1=strcat('../../../THUR15000/',keyword,'/Src/');
 D = dir(strcat('../../../THUR15000/',keyword,'/Src/*.jpg'));
 N=floor(length(D));
 
@@ -39,8 +47,14 @@ T = struct2table(score_struct);
 T_sorted = sortrows(T, 'score');
 score_struct_sorted = table2struct(T_sorted);
 
+figure;
 for j=1:top_im_num
-    filename = strcat(strcat(dir_name,'/'),score_struct_sorted(j).name);
+    filename = strcat(strcat(dir_name1,'/'),score_struct_sorted(j).name);
+    X = imread(filename);
+    if j<26
+        subplot(5,5,j);
+        imshow(mat2gray(X));
+    end
 end
 
 prec = ret_prec(score_struct_sorted, D, top_im_num, keyword, '../../../THUR15000/');
