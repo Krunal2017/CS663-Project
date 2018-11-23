@@ -149,9 +149,9 @@ function [result,threshold_map] = textureDistinctMap(im)
     threshold_map=zeros(size(result));indices=find(result>ada_thresh);
     threshold_map(indices)=1;
 %% Grabcut Segmentation of thresholded mask
-    [m1,n1,p1]=size(res_im);
-    roi=logical(zeros(m1,n1));
-    roi(1*m1/4:3*m1/4,1*n1/4:3*n1/4)=true; 
-    L = superpixels(res_im,200);
-    thres_mask = grabcut(res_im,L,roi);
+ %   [m1,n1,p1]=size(res_im);
+ %   roi=logical(zeros(m1,n1));
+  %  roi(1*m1/4:3*m1/4,1*n1/4:3*n1/4)=true; 
+   % L = superpixels(res_im,200);
+    %thres_mask = grabcut(res_im,L,roi);
 end
