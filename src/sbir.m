@@ -15,7 +15,7 @@ precisions=[];
 
 %Query image
 %q_im = imread(strcat(database_dir,keyword,'/',num2str(ind),'.jpg'));
-q_im = imread('../../Corel100/0_20.jpg');
+q_im = imread('../../../Corel100/0_20.jpg');
 k = '0';
 [im, mask] = textureDistinctMap(q_im);
 [q_image, Ix, Iy, x, y] = featureExtraction(double(q_im),mask); 
@@ -28,38 +28,43 @@ subplot(1,4,4), imshow(mat2gray(q_im)),title('Salient points'), hold on, scatter
 q_h = soh(Ix, Iy, x, y, window_size);
 
 % Load the database SOH
-soh_dir = strcat('../SOH_save/Corel_1_mhec_sal_hists.mat');
+soh_dir = strcat('../SOH_save/Corel100full.mat');
 H = load(soh_dir);
 score_struct = struct();
 
-dir_name1=strcat('../../Corel100/');
-D = dir(strcat('../../Corel100/*.jpg'));
+dir_name1=strcat('../../../Corel100/');
+D = dir(strcat('../../../Corel100/*.jpg'));
 N=floor(length(D)/3);
 
-for i=1:N
-    h = H.SALIENCY_HISTOGRAMS(:,:,i);
-    [s] = similarity_score(q_h, h, norm_thres);
-    score_struct(i).name = D(i).name;
-    score_struct(i).score = s;
+for i=1:100
+    starting=1+(i-1)*100;
+    ending=starting+100-1;
+    hist = H.SALIENCY_HISTOGRAMS(:,:,starting:ending);
+%     n=D(i).name;
+%     num=strrep(n,'.jpg','');
+    save(strcat('../SOH_save/corel_split/class_',num2str(i-1),'.mat'),'hist');
+%     [s] = similarity_score(q_h, h, norm_thres);
+%     score_struct(i).name = D(i).name;
+%     score_struct(i).hist = h;
 end
 
-%Sort the scores to get top images
-T = struct2table(score_struct);
-T_sorted = sortrows(T, 'score');
-score_struct_sorted = table2struct(T_sorted);
-
-figure;
-for j=1:top_im_num
-    filename = strcat(dir_name1,score_struct_sorted(j).name);
-    X = imread(filename);
-    if j<26
-     subplot(5,5,j);
-     imshow(mat2gray(X));
-    end
-end
-
-prec = ret_prec_corel(score_struct_sorted, D, top_im_num, keyword, '../../Corel100/', k);
-disp('Precision:');
-disp(prec);
+% %Sort the scores to get top images
+% T = struct2table(score_struct);
+% T_sorted = sortrows(T, 'score');
+% score_struct_sorted = table2struct(T_sorted);
+% 
+% figure;
+% for j=1:top_im_num
+%     filename = strcat(dir_name1,score_struct_sorted(j).name);
+%     X = imread(filename);
+%     if j<26
+%      subplot(5,5,j);
+%      imshow(mat2gray(X));
+%     end
+% end
+% 
+% prec = ret_prec_corel(score_struct_sorted, D, top_im_num, keyword, '../../../Corel100/', k);
+% disp('Precision:');
+% disp(prec);
 
 toc;
