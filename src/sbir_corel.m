@@ -4,8 +4,6 @@ tic;
 window_size = 8;
 norm_thres = 0.5;
 top_im_num = 5;
-keyword = 'DogJump';
-database_dir = '../TestImages/';
 ind = 44;
 %Database Directory
 dir_name = strcat(database_dir,keyword);
@@ -16,8 +14,9 @@ precisions=[];
 %Query image
 %q_im = imread(strcat(database_dir,keyword,'/',num2str(ind),'.jpg'));
 arr = [0,10:19,2,20:29,3,30:39,4,40:49,5,50:59,6,60:69,7,70:79,8,80:89,9,90:99];
-k = '11';
-q_im = imread(strcat('../../Corel100/',k,'_1719.jpg'));
+k = '2';
+image_name = '232';
+q_im = imread(strcat(strcat(strcat(strcat('../../Corel100/',k),'_'),image_name),'.jpg'));
 [im, mask] = textureDistinctMap(q_im);
 [q_image, Ix, Iy, x, y] = featureExtraction(double(q_im),mask); 
 figure;
