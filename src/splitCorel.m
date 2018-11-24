@@ -15,7 +15,7 @@ precisions=[];
 
 %Query image
 %q_im = imread(strcat(database_dir,keyword,'/',num2str(ind),'.jpg'));
-q_im = imread('../../../Corel100/0_20.jpg');
+q_im = imread('../../Corel100/0_20.jpg');
 k = '0';
 [im, mask] = textureDistinctMap(q_im);
 [q_image, Ix, Iy, x, y] = featureExtraction(double(q_im),mask); 
@@ -32,18 +32,18 @@ soh_dir = strcat('../SOH_save/Corel100full.mat');
 H = load(soh_dir);
 score_struct = struct();
 
-dir_name1=strcat('../../../Corel100/');
-D = dir(strcat('../../../Corel100/*.jpg'));
+dir_name1=strcat('../../Corel100/');
+D = dir(strcat('../../Corel100/*.jpg'));
 N=floor(length(D)/3);
 
 for i=1:100
     starting=1+(i-1)*100;
-    ending=min(10000,starting+120-1);
+    ending=min(10000,starting+200-1);
     hist = H.SALIENCY_HISTOGRAMS(:,:,starting:ending);
     n=D(starting).name;
     num=strrep(n,'.jpg','');
     C = strsplit(num,'_');
-    save(strcat('../SOH_save/corel_split/CLASS_',string(C(1)),'.mat'),'hist');
+    save(strcat('../SOH_save/corel_split_100/CLASS_',string(C(1)),'.mat'),'hist');
 %     [s] = similarity_score(q_h, h, norm_thres);
 %     score_struct(i).name = D(i).name;
 %     score_struct(i).hist = h;
