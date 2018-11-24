@@ -3,14 +3,17 @@ tic;
 
 window_size = 8;
 norm_thres = 0.5;
-top_im_num = 100;
-keyword = 'DogJump';
+% top_im_num = 10;
+keyword = 'plane';
 database_dir = '../TestImages/';
 
 %Database Directory
 dir_name = strcat(database_dir,keyword);
 D1=dir(strcat(dir_name,'/*.jpg'));
-precisions=[];
+% precisions=[];
+t5=[];
+t10=[];
+t20=[];
 
 %%
 for ind=1:length(D1)
@@ -26,8 +29,8 @@ soh_dir = strcat(strcat('../SOH_save/mhec/',keyword),'_full_mhec_sal_hists.mat')
 H = load(soh_dir);
 score_struct = struct();
 
-dir_name1=strcat('../../../THUR15000/',keyword,'/Src/');
-D = dir(strcat('../../../THUR15000/',keyword,'/Src/*.jpg'));
+dir_name1=strcat('../../THUR15000/',keyword,'/Src/');
+D = dir(strcat('../../THUR15000/',keyword,'/Src/*.jpg'));
 N = floor(length(D));
 
 for i=1:N
@@ -42,20 +45,65 @@ T = struct2table(score_struct);
 T_sorted = sortrows(T, 'score');
 score_struct_sorted = table2struct(T_sorted);
 
+top_im_num = 5;
+
+% for j=1:top_im_num
+%     filename = strcat(strcat(dir_name1,'/'),score_struct_sorted(j).name);
+%     X = imread(filename);
+%     if ind==1
+%         if j<26
+%             subplot(5,5,j);
+%             imshow(mat2gray(X));
+%         end
+%     end
+% end
+
+prec = ret_prec(score_struct_sorted, D, top_im_num, keyword, '../../THUR15000/');
+
+t5(ind)=prec;
+
+top_im_num = 10;
+
+% for j=1:top_im_num
+%     filename = strcat(strcat(dir_name1,'/'),score_struct_sorted(j).name);
+%     X = imread(filename);
+%     if ind==1
+%         if j<26
+%             subplot(5,5,j);
+%             imshow(mat2gray(X));
+%         end
+%     end
+% end
+
+prec = ret_prec(score_struct_sorted, D, top_im_num, keyword, '../../THUR15000/');
+
+t10(ind)=prec;
+
+top_im_num = 20;
+
+figure;
 for j=1:top_im_num
     filename = strcat(strcat(dir_name1,'/'),score_struct_sorted(j).name);
     X = imread(filename);
-    if j<26
-        subplot(5,5,j);
-        imshow(mat2gray(X));
-    end
+%     if ind==1
+        if j<26
+            subplot(5,5,j);
+            imshow(mat2gray(X));
+        end
+%     end
 end
 
-prec = ret_prec(score_struct_sorted, D, top_im_num, keyword, '../../../THUR15000/');
+prec = ret_prec(score_struct_sorted, D, top_im_num, keyword, '../../THUR15000/');
 
-precisions(ind)=prec;
+t20(ind)=prec;
+
 end
-disp('Precision:');
-disp(max(precisions));
+disp('T5 Precision:');
+disp(mean(t5));
 
+disp('T10 Precision:');
+disp(mean(t10));
+
+disp('T20 Precision:');
+disp(mean(t20));
 toc;
